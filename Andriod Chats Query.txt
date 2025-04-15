@@ -1,0 +1,16 @@
+--Grindr Application for Andriod Chats Query
+SELECT
+	COALESCE(sender_profile.display_name, chat_messages.sender) AS "Sender Display Name",
+	COALESCE(recipient_profile.display_name, chat_messages.recipient) AS "Recipient Display Name",
+	CASE
+		WHEN json_extract(body, '$.text') IS NOT NULL
+		THEN json_extract(body, '$.text')
+		ELSE body
+	END AS "Message Body",
+	chat_messages.reply_to_body AS "Message Replied To",
+	chat_messages.conversation_id AS "Conversation ID",
+	strftime('%Y-%m-%d %H:%M:%S', chat_messages.timestamp / 1000, 'unixepoch') AS "Timestamp"
+FROM chat_messages
+LEFT JOIN profile AS sender_profile ON chat_messages.sender = sender_profile.profile_id
+LEFT JOIN profile AS recipient_profile ON chat_messages.recipient = recipient_profile.profile_id
+ORDER BY chat_messages.conversation_id, chat_messages.timestamp ASC;
