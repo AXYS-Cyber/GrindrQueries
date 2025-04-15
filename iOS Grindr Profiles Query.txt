@@ -1,0 +1,12 @@
+--iOS Grindr Profiles Query
+SELECT
+    profile.profile_id,
+    profile.display_name,
+    profile.media_hash,
+    profile_note.note,
+    profile_note.phone_number,
+    GROUP_CONCAT(profile_photo.order_ || ': ' || profile_photo.media_hash, '; ') AS photo_media_hashes
+FROM profile
+LEFT JOIN profile_note ON profile.profile_id = profile_note.profile_id
+LEFT JOIN profile_photo ON profile.profile_id = profile_photo.profile_id
+GROUP BY profile.profile_id, profile.display_name, profile.media_hash, profile_note.note, profile_note.phone_number;
