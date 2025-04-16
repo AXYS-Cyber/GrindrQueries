@@ -1,12 +1,19 @@
---iOS Grindr Profiles Query
+--iOS Grindr Profiles Query v24.x and 25.2. 25.2 has much more data, this needs updated to include enrichments, espescially from zprofileentity.
+
 SELECT
-    profile.profile_id,
-    profile.display_name,
-    profile.media_hash,
-    profile_note.note,
-    profile_note.phone_number,
-    GROUP_CONCAT(profile_photo.order_ || ': ' || profile_photo.media_hash, '; ') AS photo_media_hashes
-FROM profile
-LEFT JOIN profile_note ON profile.profile_id = profile_note.profile_id
-LEFT JOIN profile_photo ON profile.profile_id = profile_photo.profile_id
-GROUP BY profile.profile_id, profile.display_name, profile.media_hash, profile_note.note, profile_note.phone_number;
+    ZINBOXCONVERSATIONENTITY.ZNAME AS 'Username',
+    ZINBOXCONVERSATIONPARTICIPANTENTITY.ZPROFILEID AS 'Profile ID',
+    ZINBOXCONVERSATIONENTITY.ZCONVERSATIONID AS 'Conversation ID',
+    datetime('2001-01-01', "ZLASTMESSAGETIMESTAMP" || ' seconds') AS 'Last Message Time',
+    ZINBOXCONVERSATIONENTITY.ZUNREADCOUNT AS 'Unread Messages',
+    ZINBOXCONVERSATIONPARTICIPANTENTITY.ZRAWDISTANCE AS 'Distance (Meters)',
+    ZINBOXCONVERSATIONPARTICIPANTENTITY.ZPRIMARYMEDIAHASH AS 'Profile Media Hash'
+FROM
+    ZINBOXCONVERSATIONENTITY
+JOIN
+    ZINBOXCONVERSATIONPARTICIPANTENTITY
+ON
+    ZINBOXCONVERSATIONPARTICIPANTENTITY.ZINBOXCONVERSATION = ZINBOXCONVERSATIONENTITY.Z_PK
+ORDER by ZINBOXCONVERSATIONENTITY.Z_PK asc;
+
+
