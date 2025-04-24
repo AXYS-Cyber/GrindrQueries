@@ -1,11 +1,9 @@
---Grindr for iOS v25.2 as of 4/16/25
---updates to ztext and profile name joins
+/*Grindr for iOS v25.2 as of 4/16/25
+updates to ztext and profile name joins*/
 
 
 SELECT
-    ZCHATMESSAGECONTENTENTITY.Z_PK AS ContentEntity_PK,
-    ZCHATMESSAGEENTITY.Z_PK AS MessageEntity_PK,
-    ZCHATMESSAGEENTITY.ZSENDERID AS SenderID,
+        ZCHATMESSAGEENTITY.ZSENDERID AS SenderID,
     sender_profile.ZNAME AS SenderName,
     -- RecipientID: Extract the other ID from ZCONVERSATIONID
     CASE
