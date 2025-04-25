@@ -77,10 +77,10 @@ SELECT
 
 	strftime('%Y-%m-%d %H:%M:%S', timestamp / 1000, 'unixepoch') AS "Timestamp",
 
-	CASE
-		WHEN unread = 1 THEN 'Unread'
-		ELSE 'Read'
-	END AS "Read Status",
+	/*CASE
+		WHEN unread = 1 THEN 'Read' --More research needed. Likely applied to when when Device user sends read receipt to subscribed sender.
+		ELSE 'Unread'
+	END AS "Read Status",*/
 
 	CASE
 		WHEN reply_to_message_id IS NOT NULL THEN 'Yes'
